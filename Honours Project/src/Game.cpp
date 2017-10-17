@@ -5,41 +5,6 @@
 std::vector<Entity*> Game::entities;
 double Game::lastTime;
 
-void Game::SpawnUnit(glm::vec3 position, glm::vec2 size)
-{
-	for (int i = 0; i < 1; i++)
-	{
-		glm::vec3 spawnPosition = position;
-		if (i % 2 == 0)
-		{
-			spawnPosition.x;
-			spawnPosition.z;
-			size.x = -size.x;
-			size.y = -size.y;
-		}
-		else
-		{
-
-		}
-		Entity* tempFlyer = new Entity;
-		auto tempRenderable = std::make_unique<Renderable>();
-		tempRenderable->SetModel("../res/models/Flyer.obj");
-		tempRenderable->SetEffect("FlyerUV");
-		tempFlyer->SetPosition(spawnPosition);
-		tempRenderable->UpdateTransforms();
-		auto tempAirMovement = std::make_unique<AirMovement>();
-		tempAirMovement->SetDestination(glm::dvec3(20, 15, 20));
-		tempAirMovement->SetSpeed(15.0);
-		tempAirMovement->SetAcceleration(0.5);
-		tempAirMovement->SetTurnSpeed(200.0);
-
-		tempFlyer->AddComponent(move(tempRenderable));
-		tempFlyer->AddComponent(move(tempAirMovement));
-		entities.push_back(tempFlyer);
-		return;
-	}
-}
-
 void Game::Initialise()
 {
 	free_cam = new Entity;
@@ -66,14 +31,12 @@ void Game::Initialise()
 
 	Entity* tempEntity = new Entity;
 	auto tempRenderable = std::make_unique<Renderable>();
-	tempRenderable->SetModel("../res/models/Constructor.obj");
+	tempRenderable->SetModel("../res/models/Torus2.obj");
 	tempRenderable->SetEffect("ConstructorUV");
 	tempEntity->SetPosition(glm::vec3(3.5f, 2.5f, 3.5f));
 	tempRenderable->UpdateTransforms();
-	auto tempStructure = std::make_unique<Structure>();
 
 	tempEntity->AddComponent(move(tempRenderable));
-	tempEntity->AddComponent(move(tempStructure));
 
 	entities.push_back(tempEntity);
 

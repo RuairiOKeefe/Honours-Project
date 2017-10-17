@@ -1,7 +1,16 @@
-#include "StateManager.h"
+#include "Game.h"
+#include "Entity.h"
+#include "Renderable.h"
+#include <memory>
 
 int main()
 {
-	StateManager::Get().StateLoop();
-	return 0;
+	GameEngine::Get().Initialise();
+
+	while (!glfwWindowShouldClose(GameEngine::Get().GetWindow()))
+	{
+			Game::Get().Update();
+			Game::Get().Render();
+	}
+	GameEngine::Get().CleanUp();
 }
