@@ -27,3 +27,8 @@
 *.exe
 *.out
 *.app
+
+#folders
+.vs/
+Debug/
+x64/
