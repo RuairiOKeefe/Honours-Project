@@ -6,6 +6,7 @@
 int main()
 {
 	GameEngine::Get().Initialise();
+	Game::Get().Initialise();
 
 	while (!glfwWindowShouldClose(GameEngine::Get().GetWindow()))
 	{

@@ -47,6 +47,44 @@ public:
 		return temp;
 	}
 
+	static Model* BuildCube(float size)
+	{
+
+		int indices[] =
+		{
+			7,6,3,2,0,
+			6,4,7,5,
+			3,1,0,5,4
+
+			//0, 1, 2, 3, 8, // Front wall
+			//4, 5, 6, 7, 8, // Back wall
+			//4, 0, 6, 3, 8, // Left wall
+			//1, 5, 3, 7, 8, // Right wall
+			//2, 3, 6, 7, 8, // Top wall
+			//0, 1, 4, 5  // Bottom wall
+		};
+
+		glm::vec3 lowerLeftFront = glm::vec3(size, size, -size),
+			upperRightBack = glm::vec3(-size, -size, size);
+
+		glm::vec3 vertices[] =
+		{
+			// Front wall of bounding box
+			lowerLeftFront,
+			glm::vec3(upperRightBack.x, lowerLeftFront.y, lowerLeftFront.z),
+			glm::vec3(lowerLeftFront.x, upperRightBack.y, lowerLeftFront.z),
+			glm::vec3(upperRightBack.x, upperRightBack.y, lowerLeftFront.z),
+			// Back wall of bounding box
+			glm::vec3(lowerLeftFront.x, lowerLeftFront.y, upperRightBack.z),
+			glm::vec3(upperRightBack.x, lowerLeftFront.y, upperRightBack.z),
+			glm::vec3(lowerLeftFront.x, upperRightBack.y, upperRightBack.z),
+			upperRightBack
+		};
+
+		Model* temp = new Model(vertices, indices);
+		temp->SetType(GL_TRIANGLES);
+		return temp;
+	}
 
 	static Model BuildLine()
 	{
