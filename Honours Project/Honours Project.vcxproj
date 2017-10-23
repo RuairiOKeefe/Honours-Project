@@ -156,6 +156,10 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\UserControls.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\Wind.frag" />
+    <None Include="res\shaders\Wind.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

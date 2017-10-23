@@ -52,12 +52,12 @@ public:
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices
 		{
-			0,3,2, 2,1,0,
-			3,0,4, 4,0,7,
-			0,1,6, 6,7,0,
-			7,6,5, 5,4,7,
-			4,5,2, 2,3,4,
-			6,1,5, 5,1,2
+			2,3,0, 0,1,2,
+			4,0,3, 7,0,4,
+			6,1,0, 0,7,6,
+			5,6,7, 7,4,5,
+			2,5,4, 4,3,2,
+			5,1,6, 2,1,5
 		};
 
 		glm::vec3 upperLeftFront = glm::vec3(size, size, size),
@@ -67,34 +67,42 @@ public:
 		// Front wall of bounding box
 		v.position = upperLeftFront;
 		v.normal = upperLeftFront;
+		v.texCoords = glm::vec2(0, 1);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(upperLeftFront.x, lowerRightBack.y, upperLeftFront.z);
 		v.normal = glm::vec3(upperLeftFront.x, lowerRightBack.y, upperLeftFront.z);
+		v.texCoords = glm::vec2(0, 0);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(upperLeftFront.x, lowerRightBack.y, lowerRightBack.z);
 		v.normal = glm::vec3(upperLeftFront.x, lowerRightBack.y, lowerRightBack.z);
+		v.texCoords = glm::vec2(1, 0);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(upperLeftFront.x, upperLeftFront.y, lowerRightBack.z);
 		v.normal = glm::vec3(upperLeftFront.x, upperLeftFront.y, lowerRightBack.z);
+		v.texCoords = glm::vec2(1, 1);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(lowerRightBack.x, upperLeftFront.y, lowerRightBack.z);
 		v.normal = glm::vec3(lowerRightBack.x, upperLeftFront.y, lowerRightBack.z);
+		v.texCoords = glm::vec2(1, 0);
 		vertices.push_back(v);
 
 		v.position = lowerRightBack;
 		v.normal = lowerRightBack;
+		v.texCoords = glm::vec2(1, 1);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(lowerRightBack.x, lowerRightBack.y, upperLeftFront.z);
 		v.normal = glm::vec3(lowerRightBack.x, lowerRightBack.y, upperLeftFront.z);
+		v.texCoords = glm::vec2(0, 1);
 		vertices.push_back(v);
 
 		v.position = glm::vec3(lowerRightBack.x, upperLeftFront.y, upperLeftFront.z);
 		v.normal = glm::vec3(lowerRightBack.x, upperLeftFront.y, upperLeftFront.z);
+		v.texCoords = glm::vec2(0, 0);
 		vertices.push_back(v);
 
 		Model* temp = new Model(vertices, indices);

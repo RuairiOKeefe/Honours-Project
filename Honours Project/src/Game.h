@@ -16,6 +16,7 @@ private:
 	Entity *free_cam = new Entity;
 	static std::vector<Entity*> entities;//Figure out how to split this.
 	static double lastTime;
+	static glm::vec3 windVector;
 
 public:
 

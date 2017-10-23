@@ -4,6 +4,7 @@
 
 std::vector<Entity*> Game::entities;
 double Game::lastTime;
+glm::vec3 Game::windVector;
 
 void Game::Initialise()
 {
@@ -49,6 +50,9 @@ void Game::Initialise()
 	tempEntity2->AddComponent(move(tempRenderable2));
 
 	entities.push_back(tempEntity2);
+
+	windVector = glm::vec3(0, 0, -1);
+
 	lastTime = clock();
 }
 
@@ -78,6 +82,7 @@ void Game::Render()
 
 //	GameEngine::Get().SetCameraPos(free_cam->GetPosition());
 	GameEngine::Get().SetCameraPos(free_cam->GetComponent<Free_Camera>().GetPosition());
+	GameEngine::Get().SetWindVector(windVector);
 
 	for (std::vector<Entity*>::size_type n = 0; n < entities.size();)
 	{

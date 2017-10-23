@@ -12,6 +12,7 @@
 #include "Entity.h"
 #include "Texture.h"
 #include "Singleton.h"
+
 class Shader : public Singleton<Shader>
 {
 private:
@@ -23,7 +24,7 @@ public:
 	
 	unsigned int AddTexture(std::string name);
 	void AddShader(std::string name);
-	void UseShader(std::string name, Effect effect, glm::mat4 mvp, glm::mat4 m, glm::mat4 n, glm::vec3 eye_pos);
+	void UseShader(std::string name, Effect effect, glm::mat4 mvp, glm::mat4 m, glm::mat4 n, glm::vec3 eye_pos, glm::vec3 windVector);
 
 	GLShader GetShader(char* loc)
 	{

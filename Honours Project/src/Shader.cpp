@@ -28,7 +28,7 @@ void Shader::AddShader(std::string name)
 	}
 }
 
-void Shader::UseShader(std::string name, Effect effect, glm::mat4 mvp, glm::mat4 m, glm::mat4 n, glm::vec3 eye_pos)
+void Shader::UseShader(std::string name, Effect effect, glm::mat4 mvp, glm::mat4 m, glm::mat4 n, glm::vec3 eye_pos, glm::vec3 windVector)
 {
 	if (shaders.find(name) == shaders.end())
 	{
@@ -69,6 +69,16 @@ void Shader::UseShader(std::string name, Effect effect, glm::mat4 mvp, glm::mat4
 		else if (name == "Colour")
 		{
 			glUniformMatrix4fv(shader.GetUniformLocation("MVP"), 1, GL_FALSE, value_ptr(mvp));
+		}
+		else if (name == "Wind")
+		{
+			glUniformMatrix4fv(shader.GetUniformLocation("MVP"), 1, GL_FALSE, value_ptr(mvp));
+			glUniform1i(shader.GetUniformLocation("tex"), 0);
+			glUniform3fv(shader.GetUniformLocation("windVector"), 1, value_ptr(windVector));
+			glUniformMatrix4fv(shader.GetUniformLocation("M"), 1, GL_FALSE, value_ptr(m));
+			glUniformMatrix3fv(shader.GetUniformLocation("N"), 1, GL_FALSE, value_ptr(glm::mat3(n)));
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, effect.texture);
 		}
 
 	}
