@@ -32,7 +32,7 @@ void Game::Initialise()
 	Entity* tempEntity = new Entity;
 	auto tempRenderable = std::make_unique<Renderable>();
 	tempRenderable->SetModel("../res/models/Torus2.obj");
-	tempRenderable->SetEffect("ConstructorUV");
+	tempRenderable->SetEffect("debug");
 	tempEntity->SetPosition(glm::vec3(3.5f, 2.5f, 3.5f));
 	tempRenderable->UpdateTransforms();
 
@@ -42,7 +42,7 @@ void Game::Initialise()
 
 	Entity* tempEntity2 = new Entity;
 	auto tempRenderable2 = std::make_unique<Renderable>();
-	tempRenderable2->SetPlane(1, 100, 100);
+	tempRenderable2->SetCube(1);
 	tempRenderable2->SetEffect("debug");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tempRenderable2->UpdateTransforms();

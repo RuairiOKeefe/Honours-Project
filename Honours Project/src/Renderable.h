@@ -14,6 +14,7 @@ public:
 	~Renderable();
 
 	void SetPlane(float spacing, unsigned int xSize, unsigned int ySize);
+	void Renderable::SetCube(float size);
 	void SetModel(std::string location);
 	void SetEffect(std::string texName);
 	void Render();

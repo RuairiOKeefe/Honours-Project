@@ -52,7 +52,7 @@ void GameEngine::Render(glm::mat4 m, Model model, Effect effect)
 {
 	const auto mvp = Get().cameraMVP * m;
 //	Shader::Get().UseShader("Basic", effect, mvp);
-	Shader::Get().UseShader("Phong", effect, mvp, m, m, cameraPos);
+	Shader::Get().UseShader("Basic", effect, mvp, m, m, cameraPos);
 	model.Draw();
 }
 

@@ -18,6 +18,11 @@ void Renderable::SetPlane(float spacing, unsigned int xSize, unsigned int ySize)
 
 }
 
+void Renderable::SetCube(float size)
+{
+	model = GeometryUtil::BuildCube(size);
+}
+
 void Renderable::SetModel(std::string location)
 {
 	model = new Model(location);
@@ -26,6 +31,8 @@ void Renderable::SetModel(std::string location)
 void Renderable::SetEffect(std::string texName)
 {
 	effect->texture = Shader::Get().AddTexture(texName);
+	effect->shader = "Basic";
+	Shader::Get().AddShader("Basic");
 }
 
 void Renderable::Render()

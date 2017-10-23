@@ -42,44 +42,60 @@ public:
 			}
 		}
 
-		Model* temp  = new Model(vertices,indices);
+		Model* temp = new Model(vertices, indices);
 		temp->SetType(GL_TRIANGLE_STRIP);
 		return temp;
 	}
 
 	static Model* BuildCube(float size)
 	{
-
-		int indices[] =
+		std::vector<Vertex> vertices;
+		std::vector<unsigned int> indices
 		{
-			7,6,3,2,0,
-			6,4,7,5,
-			3,1,0,5,4
-
-			//0, 1, 2, 3, 8, // Front wall
-			//4, 5, 6, 7, 8, // Back wall
-			//4, 0, 6, 3, 8, // Left wall
-			//1, 5, 3, 7, 8, // Right wall
-			//2, 3, 6, 7, 8, // Top wall
-			//0, 1, 4, 5  // Bottom wall
+			0,3,2, 2,1,0,
+			3,0,4, 4,0,7,
+			0,1,6, 6,7,0,
+			7,6,5, 5,4,7,
+			4,5,2, 2,3,4,
+			6,1,5, 5,1,2
 		};
 
-		glm::vec3 lowerLeftFront = glm::vec3(size, size, -size),
-			upperRightBack = glm::vec3(-size, -size, size);
+		glm::vec3 upperLeftFront = glm::vec3(size, size, size),
+			lowerRightBack = glm::vec3(-size, -size, -size);
 
-		glm::vec3 vertices[] =
-		{
-			// Front wall of bounding box
-			lowerLeftFront,
-			glm::vec3(upperRightBack.x, lowerLeftFront.y, lowerLeftFront.z),
-			glm::vec3(lowerLeftFront.x, upperRightBack.y, lowerLeftFront.z),
-			glm::vec3(upperRightBack.x, upperRightBack.y, lowerLeftFront.z),
-			// Back wall of bounding box
-			glm::vec3(lowerLeftFront.x, lowerLeftFront.y, upperRightBack.z),
-			glm::vec3(upperRightBack.x, lowerLeftFront.y, upperRightBack.z),
-			glm::vec3(lowerLeftFront.x, upperRightBack.y, upperRightBack.z),
-			upperRightBack
-		};
+		Vertex v;
+		// Front wall of bounding box
+		v.position = upperLeftFront;
+		v.normal = upperLeftFront;
+		vertices.push_back(v);
+
+		v.position = glm::vec3(upperLeftFront.x, lowerRightBack.y, upperLeftFront.z);
+		v.normal = glm::vec3(upperLeftFront.x, lowerRightBack.y, upperLeftFront.z);
+		vertices.push_back(v);
+
+		v.position = glm::vec3(upperLeftFront.x, lowerRightBack.y, lowerRightBack.z);
+		v.normal = glm::vec3(upperLeftFront.x, lowerRightBack.y, lowerRightBack.z);
+		vertices.push_back(v);
+
+		v.position = glm::vec3(upperLeftFront.x, upperLeftFront.y, lowerRightBack.z);
+		v.normal = glm::vec3(upperLeftFront.x, upperLeftFront.y, lowerRightBack.z);
+		vertices.push_back(v);
+
+		v.position = glm::vec3(lowerRightBack.x, upperLeftFront.y, lowerRightBack.z);
+		v.normal = glm::vec3(lowerRightBack.x, upperLeftFront.y, lowerRightBack.z);
+		vertices.push_back(v);
+
+		v.position = lowerRightBack;
+		v.normal = lowerRightBack;
+		vertices.push_back(v);
+
+		v.position = glm::vec3(lowerRightBack.x, lowerRightBack.y, upperLeftFront.z);
+		v.normal = glm::vec3(lowerRightBack.x, lowerRightBack.y, upperLeftFront.z);
+		vertices.push_back(v);
+
+		v.position = glm::vec3(lowerRightBack.x, upperLeftFront.y, upperLeftFront.z);
+		v.normal = glm::vec3(lowerRightBack.x, upperLeftFront.y, upperLeftFront.z);
+		vertices.push_back(v);
 
 		Model* temp = new Model(vertices, indices);
 		temp->SetType(GL_TRIANGLES);
