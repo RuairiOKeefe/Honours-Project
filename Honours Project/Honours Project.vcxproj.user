@@ -5,4 +5,9 @@
     <LocalDebuggerEnvironment>PATH=../bin;$(Path)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)/src</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerEnvironment>PATH=../bin;$(Path)</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>
