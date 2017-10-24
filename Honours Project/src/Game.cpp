@@ -51,7 +51,7 @@ void Game::Initialise()
 
 	entities.push_back(tempEntity2);
 
-	windVector = glm::vec3(0, 0, -1);
+	windVector = glm::vec3(-1, -1, -1);
 
 	lastTime = clock();
 }

@@ -46,9 +46,9 @@ public:
 	void SetFullScreen(int val) { fullScreen = val; }
 	void SetScreenWidth(int val) { width = val; }
 	void SetScreenHeight(int val) { height = val; }
-	void SetWindVector(glm::vec3 pos) { cameraPos = pos; }
-	void SetCameraPos(glm::vec3 windVector) { this->windVector = windVector; }
-
+	void SetCameraPos(glm::vec3 pos) { cameraPos = pos; }
+	void SetWindVector(glm::vec3 windVector){ this->windVector = windVector; }
+	
 	void SetCamera(glm::mat4 camera);
 	// Execute the game engine.
 	void Start();
