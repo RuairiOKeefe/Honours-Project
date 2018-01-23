@@ -16,9 +16,9 @@ void GameEngine::Initialise()
 	io.LoadIniFile();
 	// Create a windowed mode window with hard coded parameters.
 	if(fullScreen == false)
-		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Team Rocket", NULL, NULL);
+		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Honours", NULL, NULL);
 	else
-		window = glfwCreateWindow(GetScreenWidth(),GetScreenHeight(), "Team Rocket", glfwGetPrimaryMonitor(), NULL);
+		window = glfwCreateWindow(GetScreenWidth(),GetScreenHeight(), "Honours", glfwGetPrimaryMonitor(), NULL);
 	
 	// Window is now initalised, now make it the current context.
 	glfwMakeContextCurrent(Get().window);

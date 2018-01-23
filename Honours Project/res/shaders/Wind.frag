@@ -15,7 +15,8 @@ layout(location = 0) out vec4 colour;
 void main()
 {
 	//colour = texture(tex, tex_coord);
-	
-	vec3 result = cross(windVector, position);
-	colour = vec4(result.x, result.y, result.z, 1.0f);
+
+	colour = max(dot(normal, windVector), 0) * vec4(1,0,0,1);
+	if(colour.x < 1.0)
+		colour.z = 1.0 - colour.x;
 }

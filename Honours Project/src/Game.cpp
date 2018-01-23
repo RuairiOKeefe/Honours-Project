@@ -4,7 +4,7 @@
 
 std::vector<Entity*> Game::entities;
 double Game::lastTime;
-glm::vec3 Game::windVector;
+glm::vec3 Game::windVector = glm::vec3(1,0,0);
 
 void Game::Initialise()
 {
@@ -14,21 +14,6 @@ void Game::Initialise()
 	cam->SetProjection(GameEngine::Get().GetScreenWidth() / GameEngine::Get().GetScreenHeight(), 2.414f, 1000);
 	std::cout << GameEngine::Get().GetScreenHeight();
 	free_cam->AddComponent(move(cam));
-
-	// Add a red point light to 0, 0.5, 0
-	Entity* tempEntity3 = new Entity;
-	for(int i = 1; i < 5; i++)
-	{
-		for(int j = 1; j < 5; j++)
-		{
-			auto tempLightComponent = std::make_unique<PointLight>();
-			tempLightComponent->SetEffect("Phong");
-			tempLightComponent->setLightPosition(glm::vec3(i * 30 - 30, 10, j * 30 - 30));
-			tempLightComponent->diffuse = glm::vec4(i / 4, j / 4, i % j / 8, 1);
-			tempEntity3->AddComponent(move(tempLightComponent));
-		}
-	}
-	entities.push_back(tempEntity3);
 
 	Entity* tempEntity = new Entity;
 	auto tempRenderable = std::make_unique<Renderable>();
@@ -69,6 +54,21 @@ void Game::Update()
 		entities[n]->Update(deltaTime);
 		n++;
 	}
+	if (xflip)
+		windVector.x -= deltaTime;
+	else
+		windVector.x += deltaTime;
+
+	if (zflip)
+		windVector.z -= deltaTime;
+	else
+		windVector.z += deltaTime;
+
+	if (windVector.x > 1 || windVector.x < -1)
+		xflip = !xflip;
+	if (windVector.z > 1 || windVector.z < -1)
+		zflip = !zflip;
+	glm::normalize(windVector);
 
 //	printf("%f.9\n", deltaTime);
 }
