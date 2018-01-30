@@ -140,6 +140,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\UserControls.h" />
+    <ClInclude Include="SurfaceData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Entity.cpp" />

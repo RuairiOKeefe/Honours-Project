@@ -70,7 +70,9 @@ Model::Model(const std::string &fileName)
 			{
 				aiFace modelFace = modelMesh->mFaces[j];
 				for (GLuint l = 0; l < 3; l++)
+				{
 					indices.push_back(vertex_begin + modelFace.mIndices[l]);
+				}
 			}
 		}
 		vertex_begin += modelMesh->mNumVertices;
