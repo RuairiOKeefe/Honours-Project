@@ -78,7 +78,7 @@
     <ClInclude Include="src\UserControls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SurfaceData.h">
+    <ClInclude Include="src\SurfaceData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -129,6 +129,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\UserControls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SurfaceData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

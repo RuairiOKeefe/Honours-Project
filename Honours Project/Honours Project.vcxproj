@@ -137,10 +137,10 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Singleton.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\SurfaceData.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\UserControls.h" />
-    <ClInclude Include="SurfaceData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Entity.cpp" />
@@ -157,6 +157,7 @@
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="src\SurfaceData.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\UserControls.cpp" />
   </ItemGroup>

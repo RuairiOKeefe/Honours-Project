@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Model.h"
 
 class SurfaceData
 {
 	double area;
-	glm::vec3 center;
 	glm::vec3 normal;
+
+	void CalculateSurface(Vertex* vertices);
 };
