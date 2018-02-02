@@ -6,10 +6,12 @@
 #include <map>
 #include "Model.h"
 
+using namespace glm;
 class SurfaceData
 {
 	double area;
-	glm::vec3 normal;
+	vec3 normal;
 
 	void CalculateSurface(Vertex* vertices);
+	vec3 CalculateSurfaceAirflow(Vertex* vertices);
 };
