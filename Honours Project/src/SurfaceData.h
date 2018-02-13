@@ -13,5 +13,5 @@ class SurfaceData
 	vec3 normal;
 
 	void CalculateSurface(Vertex* vertices);
-	vec3 CalculateSurfaceAirflow(Vertex* vertices);
+	vec3 CalculateSurfaceAirflow(Vertex* vertices, vec3 deltaAngle, float deltaTime);
 };

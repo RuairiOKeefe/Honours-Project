@@ -18,12 +18,12 @@ void SurfaceData::CalculateSurface(Vertex* Vertices)
 	}
 }
 
-vec3 SurfaceData::CalculateSurfaceAirflow(Vertex * vertices)
+vec3 SurfaceData::CalculateSurfaceAirflow(Vertex * vertices, vec3 deltaAngle, float deltaTime)
 {
 	for (int i = 0; i < 3; i++)
 	{
 		float radius = distance(vertices[i].position, vec3(0));//fill in with model centerpoint, which we will need to gather
-		//angular momentum = radius * (deltaAngle/deltaTime);
+		vec3 angularVel = radius * (deltaAngle/deltaTime);
 	}
 
 	return vec3();
