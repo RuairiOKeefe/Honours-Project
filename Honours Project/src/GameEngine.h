@@ -1,5 +1,8 @@
 #pragma once
 #define GLEW_STATIC
+#define NUM_PARTICLES 1024*1024 // total number of particles to move
+#define WORK_GROUP_SIZE 128 // # work-items per work-group
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -10,6 +13,25 @@
 #include "Model.h"
 
 class Material;
+
+
+struct pos
+{
+	float x, y, z, w;// positions
+};
+struct vel
+{
+	float vx, vy, vz, vw;  //velocities
+};
+struct colour
+{
+	float r, g, b, a; // colours
+};
+
+// need to do the following for both position, velocity, and colors of the particles:
+GLuint posSSbo;
+GLuint velSSbo;
+GLuint colSSbo;
 
 struct Effect
 {
@@ -48,7 +70,8 @@ public:
 	void SetScreenHeight(int val) { height = val; }
 	void SetCameraPos(glm::vec3 pos) { cameraPos = pos; }
 	void SetWindVector(glm::vec3 windVector){ this->windVector = windVector; }
-	
+	void SetupComputeShader();
+
 	void SetCamera(glm::mat4 camera);
 	// Execute the game engine.
 	void Start();
