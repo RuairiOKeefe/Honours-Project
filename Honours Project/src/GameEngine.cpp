@@ -59,7 +59,8 @@ void GameEngine::Render(glm::mat4 m, Model model, Effect effect)
 void GameEngine::SetupComputeShader()
 {
 	glGenBuffers(1, &posSSbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSbo);	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct pos), NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct pos), NULL, GL_STATIC_DRAW);
 
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
 	struct pos *points = (struct pos *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(struct pos), bufMask);
@@ -74,7 +75,8 @@ void GameEngine::SetupComputeShader()
 
 	glGenBuffers(1, &velSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct vel), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct vel), NULL, GL_STATIC_DRAW);
+
 	struct vel *vels = (struct vel *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(struct vel), bufMask);
 
 	for (int i = 0; i < NUM_PARTICLES; i++)

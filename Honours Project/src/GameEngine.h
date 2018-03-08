@@ -28,10 +28,7 @@ struct colour
 	float r, g, b, a; // colours
 };
 
-// need to do the following for both position, velocity, and colors of the particles:
-GLuint posSSbo;
-GLuint velSSbo;
-GLuint colSSbo;
+
 
 struct Effect
 {
@@ -53,6 +50,10 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 windVector;
 
+	// need to do the following for both position, velocity, and colors of the particles:
+	GLuint posSSbo;
+	GLuint velSSbo;
+	GLuint colSSbo;
 public:
 
 	// The render window.
@@ -69,7 +70,7 @@ public:
 	void SetScreenWidth(int val) { width = val; }
 	void SetScreenHeight(int val) { height = val; }
 	void SetCameraPos(glm::vec3 pos) { cameraPos = pos; }
-	void SetWindVector(glm::vec3 windVector){ this->windVector = windVector; }
+	void SetWindVector(glm::vec3 windVector) { this->windVector = windVector; }
 	void SetupComputeShader();
 
 	void SetCamera(glm::mat4 camera);
