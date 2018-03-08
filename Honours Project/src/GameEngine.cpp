@@ -15,11 +15,11 @@ void GameEngine::Initialise()
 	FileIO io = FileIO::Get();
 	io.LoadIniFile();
 	// Create a windowed mode window with hard coded parameters.
-	if(fullScreen == false)
+	if (fullScreen == false)
 		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Honours", NULL, NULL);
 	else
-		window = glfwCreateWindow(GetScreenWidth(),GetScreenHeight(), "Honours", glfwGetPrimaryMonitor(), NULL);
-	
+		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Honours", glfwGetPrimaryMonitor(), NULL);
+
 	// Window is now initalised, now make it the current context.
 	glfwMakeContextCurrent(Get().window);
 	if (!Get().window)
@@ -51,7 +51,7 @@ void GameEngine::Initialise()
 void GameEngine::Render(glm::mat4 m, Model model, Effect effect)
 {
 	const auto mvp = Get().cameraMVP * m;
-//	Shader::Get().UseShader("Basic", effect, mvp);
+	//	Shader::Get().UseShader("Basic", effect, mvp);
 	Shader::Get().UseShader("Wind", effect, mvp, m, m, cameraPos, windVector);
 	model.Draw();
 }
@@ -89,6 +89,20 @@ void GameEngine::SetupComputeShader()
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
+void GameEngine::InvokeComputeShader()
+{
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, posSSbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, velSSbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, colSSbo);
+
+	glUseProgram(254234234);//Fix badly
+	glDispatchCompute(NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+	///rendering part, for the example im using this is used to render particles
+
+}
+
 void GameEngine::SetCamera(glm::mat4 camera)
 {
 	cameraMVP = camera;
@@ -109,7 +123,7 @@ void GameEngine::CleanUp()
 void GameEngine::PrintGlewInfo()
 {
 	printf("-------------------------------------------------------\n");
-//	printf("Glew version: %p\n", glewGetString(GLEW_VERSION));
+	//	printf("Glew version: %p\n", glewGetString(GLEW_VERSION));
 
 	std::clog << "GL Version: " << glGetString(GL_VERSION) << std::endl;
 	std::clog << "GL Vendor: " << glGetString(GL_VENDOR) << std::endl;

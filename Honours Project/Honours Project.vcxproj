@@ -162,6 +162,7 @@
     <ClCompile Include="src\UserControls.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\SimulateSurface.comp" />
     <None Include="res\shaders\Wind.frag" />
     <None Include="res\shaders\Wind.vert" />
   </ItemGroup>
