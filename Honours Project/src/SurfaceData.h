@@ -1,4 +1,5 @@
 #pragma once
+#include "Entity.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp> 
 #include <string>
@@ -7,7 +8,7 @@
 #include "Model.h"
 
 using namespace glm;
-class SurfaceData
+class SurfaceData : public Component
 {
 	double area;
 	vec3 normal;
