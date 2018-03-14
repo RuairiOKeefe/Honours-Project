@@ -1,6 +1,6 @@
 #include "SurfaceData.h"
 
-void SurfaceData::CalculateSurface(Vertex* Vertices)
+void SurfaceData::CalculateSurface(std::vector<Vertex> Vertices)
 {
 	vec3 AB, AC;
 	float angle;
@@ -18,7 +18,7 @@ void SurfaceData::CalculateSurface(Vertex* Vertices)
 	}
 }
 
-vec3 SurfaceData::CalculateSurfaceAirflow(Vertex * vertices, vec3 deltaAngle, float deltaTime)
+vec3 SurfaceData::CalculateSurfaceAirflow(std::vector<Vertex> vertices, vec3 deltaAngle, float deltaTime)
 {
 	for (int i = 0; i < 3; i++)
 	{

@@ -81,6 +81,9 @@
     <ClInclude Include="src\SurfaceData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\aerodynamics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Entity.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SurfaceData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aerodynamics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
