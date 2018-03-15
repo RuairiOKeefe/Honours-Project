@@ -28,6 +28,7 @@ void Game::Initialise()
 
 	Entity* tempEntity2 = new Entity;
 	auto tempRenderable2 = std::make_unique<Renderable>();
+	auto tempAerodynamics = std::make_unique<aerodynamics>();
 	tempRenderable2->SetCube(1);
 	tempRenderable2->SetEffect("debug");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));

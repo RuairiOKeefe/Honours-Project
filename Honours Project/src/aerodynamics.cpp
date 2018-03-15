@@ -1,5 +1,17 @@
 #include "aerodynamics.h"
 
+void aerodynamics::from_json(const nlohmann::json & j)
+{
+}
+
+aerodynamics::aerodynamics() : Component("aerodynamics")
+{
+}
+
+aerodynamics::~aerodynamics()
+{
+}
+
 void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic model is created, only needs to be called once. Parallelisation isn't necessary, if it takes too long to generate consider however
 {
 	int numverts = vertices.size();

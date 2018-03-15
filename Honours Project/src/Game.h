@@ -7,6 +7,7 @@
 #include "GameEngine.h"
 #include "Free_Camera.h"
 #include "Renderable.h"
+#include "aerodynamics.h"
 
 class Entity;
 

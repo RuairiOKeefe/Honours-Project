@@ -14,5 +14,10 @@ class aerodynamics : public Model, public Component
 public:
 	SurfaceData* surfaceData;
 
+	void from_json(const nlohmann::json & j);
+
+	aerodynamics();
+	~aerodynamics();
+
 	void GenerateSurfaceData();
 };
