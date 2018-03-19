@@ -28,11 +28,13 @@ void Game::Initialise()
 
 	Entity* tempEntity2 = new Entity;
 	auto tempRenderable2 = std::make_unique<Renderable>();
-	auto tempAerodynamics = std::make_unique<aerodynamics>();
+	auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/Torus2.obj");
 	tempRenderable2->SetCube(1);
 	tempRenderable2->SetEffect("debug");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tempRenderable2->UpdateTransforms();
+	tempAerodynamics->GenerateSurfaceData();
+	tempEntity2->AddComponent(move(tempAerodynamics));
 	tempEntity2->AddComponent(move(tempRenderable2));
 
 	entities.push_back(tempEntity2);

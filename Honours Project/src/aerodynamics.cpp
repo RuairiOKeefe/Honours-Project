@@ -4,7 +4,11 @@ void aerodynamics::from_json(const nlohmann::json & j)
 {
 }
 
-aerodynamics::aerodynamics() : Component("aerodynamics")
+aerodynamics::aerodynamics() :  Component("aerodynamics")
+{
+}
+
+aerodynamics::aerodynamics(const std::string & fileName) : Component("aerodynamics"), Model(fileName)
 {
 }
 
@@ -18,11 +22,21 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 	for (int i = 0; i < numverts/3; i++)
 	{
 		std::vector<Vertex> polyVerts;
+		SurfaceData *tempSurface = new SurfaceData();
 		for (int j = 0; j < 3; j++)
 		{
 			polyVerts.push_back(vertices[i + j]);
 		}
-		surfaceData[i].CalculateSurface(polyVerts);
+		tempSurface->CalculateSurface(polyVerts);
+		surfaceData.push_back(*tempSurface);
 		polyVerts.clear();
+	}
+}
+
+void aerodynamics::Update(const double delta)
+{
+	for (int i = 0; i < surfaceData.size(); i++)
+	{
+		surfaceData[i].CalculateSurfaceAirflow(vec3(0),0);
 	}
 }
