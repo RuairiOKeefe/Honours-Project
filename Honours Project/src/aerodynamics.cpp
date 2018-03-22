@@ -35,8 +35,10 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 void aerodynamics::Update(const double delta)
 {
+
+	vec3 orientation = vec3(GetParent()->GetTransform()[2][0], 0, GetParent()->GetTransform()[2][2]); //may be reverse?
 	for (int i = 0; i < surfaceData.size(); i++)
 	{
-		surfaceData[i].CalculateSurfaceAirflow(vec3(0),0);
+		surfaceData[i].CalculateSurfaceAirflow(orientation, delta);
 	}
 }
