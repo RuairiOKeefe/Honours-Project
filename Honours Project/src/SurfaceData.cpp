@@ -14,10 +14,12 @@ void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 	normal = vec3(0, 0, 0);
 
 	vertexWeights = vec3(0);
-	for (int i = 0; i < 3; i++)
-	{
-		normal.x = 1;
-	}
+
+	vec3 a = vertices[0].position - vertices[1].position;
+	vec3 b = vertices[0].position - vertices[2].position;
+
+	normal = cross(a, b);
+	normal = normalize(normal);
 
 	center.x = (vertices[0].position.x + vertices[1].position.x + vertices[2].position.x) / 3;
 	center.y = (vertices[0].position.y + vertices[1].position.y + vertices[2].position.y) / 3;
@@ -40,15 +42,15 @@ vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, float deltaTime)
 		{
 		case(0):
 			faceVel += (angularVel*vertexWeights.x);
-			return;
+			break;
 		case(1):
 			faceVel += (angularVel*vertexWeights.y);
-			return;
+			break;
 		case(2):
 			faceVel += (angularVel*vertexWeights.z);
-			return;
+			break;
 		}
 	}
 
-	return vec3();
+	return vec3(0);
 }
