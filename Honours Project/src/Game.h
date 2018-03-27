@@ -3,6 +3,7 @@
 #include <memory>
 #include <chrono>
 
+#include "btBulletDynamicsCommon.h"
 #include "Singleton.h"
 #include "GameEngine.h"
 #include "Free_Camera.h"
@@ -20,6 +21,8 @@ private:
 	static glm::vec3 windVector;
 	bool xflip = false;
 	bool zflip = true;
+
+	btDiscreteDynamicsWorld* dynamicsWorld;
 
 public:
 

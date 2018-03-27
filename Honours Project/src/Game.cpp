@@ -6,6 +6,8 @@ std::vector<Entity*> Game::entities;
 double Game::lastTime;
 glm::vec3 Game::windVector = glm::vec3(1,0,0);
 
+btDiscreteDynamicsWorld* dynamicsWorld;
+
 void Game::Initialise()
 {
 	free_cam = new Entity;
@@ -42,6 +44,18 @@ void Game::Initialise()
 	windVector = glm::vec3(1, 1, 1);
 
 	lastTime = clock();
+
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+	dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 }
 
 void Game::Update()
