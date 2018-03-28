@@ -1,4 +1,5 @@
 #pragma once
+#define GLFW_DLL
 #include "Transform.h"
 #include <glm\common.hpp>
 #include <vector>

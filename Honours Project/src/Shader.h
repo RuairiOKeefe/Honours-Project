@@ -1,4 +1,5 @@
 #pragma once
+#define GLFW_DLL
 #include <memory>
 #include <map>
 #include <GL\glew.h>

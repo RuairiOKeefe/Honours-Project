@@ -1,5 +1,6 @@
 #pragma once
 #define GLEW_STATIC
+#define GLFW_DLL
 #define NUM_PARTICLES 1024*1024 // total number of particles to move
 #define WORK_GROUP_SIZE 128 // # work-items per work-group
 

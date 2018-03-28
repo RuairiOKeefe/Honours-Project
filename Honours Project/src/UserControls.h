@@ -1,4 +1,5 @@
 #pragma once
+#define GLFW_DLL
 #include "Singleton.h"
 #include "GameEngine.h"
 #include <map>
