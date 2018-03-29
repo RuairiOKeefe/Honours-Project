@@ -26,6 +26,7 @@ private:
 
 public:
 
+	btDiscreteDynamicsWorld* GetDynamicsWorld(){ return dynamicsWorld; };
 	void Initialise();
 	void Update();
 	void Render();

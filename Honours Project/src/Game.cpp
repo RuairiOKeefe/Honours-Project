@@ -65,6 +65,9 @@ void Game::Update()
 	double deltaTime = (clock() - lastTime) / CLOCKS_PER_SEC;
 	lastTime = clock();
 	free_cam->Update(deltaTime);
+
+	dynamicsWorld->stepSimulation(deltaTime, 10);
+
 	for (std::vector<Entity*>::size_type n = 0; n < entities.size();)
 	{
 		//entities[n]->Rotate(glm::vec3(0.01f, 0.01f, 0.0f));

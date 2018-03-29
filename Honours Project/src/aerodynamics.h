@@ -7,10 +7,14 @@
 #include <map>
 #include "Model.h"
 #include "SurfaceData.h"
+#include "btBulletDynamicsCommon.h"
 
 using namespace glm;
 class aerodynamics : public Model, public Component
 {
+private:
+	int index;
+
 public:
 	std::vector<SurfaceData> surfaceData;
 
