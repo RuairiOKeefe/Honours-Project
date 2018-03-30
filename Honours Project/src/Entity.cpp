@@ -31,6 +31,10 @@ Component::~Component() {
 	token.clear();
 }
 
+void Component::Init()
+{
+}
+
 bool Component::IsActive() { return active; }
 
 void Component::SetActive(bool b) { active = b; }
@@ -54,6 +58,14 @@ Entity::~Entity()
 const string Entity::GetName() const { return name; }
 
 void Entity::SetName(string const &name) { this->name = name; }
+
+void Entity::Init()
+{
+	for (auto &c : components)
+	{
+		c.second->Init();
+	}
+}
 
 void Entity::Update(const double delta)
 {

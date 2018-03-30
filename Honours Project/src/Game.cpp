@@ -10,6 +10,18 @@ btDiscreteDynamicsWorld* dynamicsWorld;
 
 void Game::Initialise()
 {
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+	dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
+
 	free_cam = new Entity;
 	auto cam = std::make_unique<Free_Camera>(glm::half_pi<float>());
 	cam->SetPosition(glm::dvec3(10.0, 5.0, 50.0));
@@ -35,27 +47,18 @@ void Game::Initialise()
 	tempRenderable2->SetEffect("debug");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tempRenderable2->UpdateTransforms();
-	tempAerodynamics->GenerateSurfaceData();
+	tempAerodynamics->UpdateTransforms();
+	//tempAerodynamics->GenerateSurfaceData();
 	tempEntity2->AddComponent(move(tempAerodynamics));
 	tempEntity2->AddComponent(move(tempRenderable2));
 
 	entities.push_back(tempEntity2);
 
+	entities[entities.size()-1]->Init();
+
 	windVector = glm::vec3(1, 1, 1);
 
 	lastTime = clock();
-
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
-
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-
-	dynamicsWorld->setGravity(btVector3(0, -9.8, 0));
 }
 
 void Game::Update()

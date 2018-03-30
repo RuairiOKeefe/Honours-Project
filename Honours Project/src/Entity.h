@@ -35,6 +35,7 @@ public:
 	}
 
 	virtual ~Component();
+	virtual void Init();
 	virtual void Update(double delta) {};
 	virtual void Render() {};
 	bool IsActive();
@@ -56,6 +57,7 @@ public:
 
 	const std::string GetName() const;
 	void SetName(std::string const &name);
+	void Init();
 	void Update(const double delta);
 	void Render();
 

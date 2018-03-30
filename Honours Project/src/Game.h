@@ -26,7 +26,9 @@ private:
 
 public:
 
-	btDiscreteDynamicsWorld* GetDynamicsWorld(){ return dynamicsWorld; };
+	btDiscreteDynamicsWorld* GetDynamicsWorld() { return dynamicsWorld; };
+	inline btVector3 glm2bt(const glm::vec3& vec) { return { vec.x, vec.y, vec.z }; };
+	inline glm::vec3 bt2glm(const btVector3& vec) { return glm::vec3( vec.getX(), vec.getY(), vec.getZ() ); };
 	void Initialise();
 	void Update();
 	void Render();

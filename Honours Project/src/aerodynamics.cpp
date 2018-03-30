@@ -17,34 +17,35 @@ aerodynamics::~aerodynamics()
 {
 }
 
+void aerodynamics::Init()
+{
+	GenerateSurfaceData();
+}
+
 void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic model is created, only needs to be called once. Parallelisation isn't necessary, if it takes too long to generate consider however
 {
 	btTriangleMesh* mesh = new btTriangleMesh();
 
 	int numverts = vertices.size();
-	for (int i = 0; i < numverts; i + 3)
+	for (int i = 0; i < numverts-2; i+=3)//check this
 	{
 		std::vector<Vertex> polyVerts;
 		SurfaceData *tempSurface = new SurfaceData();
 		for (int j = 0; j < 3; j++)
 		{
-			polyVerts.push_back(vertices[i + j]);
+			if (i + j < numverts)
+				polyVerts.push_back(vertices[i + j]);
+			else
+				polyVerts.push_back(vertices[0]);
 		}
 		tempSurface->CalculateSurface(polyVerts);
 		surfaceData.push_back(*tempSurface);
 		polyVerts.clear();
 		btVector3 v0, v1, v2;
-		v0.x = vertices[i].position.x;
-		v0.y = vertices[i].position.y;
-		v0.z = vertices[i].position.z;
 
-		v1.x = vertices[i + 1].position.x;
-		v1.y = vertices[i + 1].position.y;
-		v1.z = vertices[i + 1].position.z;
-
-		v2.x = vertices[i + 2].position.x;
-		v2.y = vertices[i + 2].position.y;
-		v2.z = vertices[i + 2].position.z;
+		v0 = btVector3(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+		v1 = btVector3(vertices[i + 1].position.x, vertices[i + 1].position.y, vertices[i + 1].position.z);
+		v2 = btVector3(vertices[i + 2].position.x, vertices[i + 2].position.y, vertices[i + 2].position.z);
 
 		mesh->addTriangle(v0, v1, v2);
 	}
@@ -53,17 +54,16 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 	btTransform	trans;
 	trans.setIdentity();
 
-	btVector3 position;
+	vec3 p = vec3(GetParent()->GetPosition());
+	btVector3 position = Game::Get().glm2bt(p);
 	trans.setOrigin(position);
 
-	btCollisionShape* trimeshShape = new btBvhTriangleMeshShape(mesh, false);
+	btBvhTriangleMeshShape* trimeshShape = new btBvhTriangleMeshShape(mesh, false);
 
-	btVector3 inertia;
-	inertia.x = 0;
-	inertia.y = 0;
-	inertia.z = 0;
+	btVector3 inertia = btVector3(0.0, 0.0, 0.0);
 
-	trimeshShape->calculateLocalInertia(1, inertia);
+	btScalar scalar = 1.0;
+	trimeshShape->calculateLocalInertia(scalar, inertia);//Throws an error
 
 	btDefaultMotionState* motionstate = new btDefaultMotionState(trans);
 
@@ -80,7 +80,6 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 void aerodynamics::Update(const double delta)
 {
-
 	vec3 orientation = vec3(GetParent()->GetTransform()[2][0], 0, GetParent()->GetTransform()[2][2]); //may be reverse?
 	for (int i = 0; i < surfaceData.size(); i++)
 	{
