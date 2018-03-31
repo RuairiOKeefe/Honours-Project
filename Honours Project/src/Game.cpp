@@ -81,10 +81,6 @@ void Game::Update()
 			t = collObj->getWorldTransform();
 			t.getOpenGLMatrix(mat);
 			entities[n]->SetTransform(btScalar2glmMat4(mat));
-			printf("____________\n");
-			for (int i = 0; i < 16; i++)
-				printf("%f\n", mat[i]);
-			printf("____________\n");
 		}
 		//entities[n]->Rotate(glm::vec3(0.01f, 0.01f, 0.0f));
 		entities[n]->Update(deltaTime);
