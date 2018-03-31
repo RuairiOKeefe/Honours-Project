@@ -24,6 +24,7 @@ public:
 	aerodynamics(const std::string& fileName);
 	~aerodynamics();
 
+	int GetIndex() { return index; };
 	void Init();
 	void GenerateSurfaceData();
 	void Update(const double delta);

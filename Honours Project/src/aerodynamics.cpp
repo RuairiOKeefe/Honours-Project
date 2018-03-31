@@ -74,7 +74,7 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 	collisionObject->setCollisionShape(trimeshShape);
 
-	Game::Get().GetDynamicsWorld()->addCollisionObject(collisionObject);
+	//Game::Get().GetDynamicsWorld()->addCollisionObject(collisionObject);
 	Game::Get().GetDynamicsWorld()->addRigidBody(body);
 }
 

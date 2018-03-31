@@ -4,7 +4,7 @@
 
 std::vector<Entity*> Game::entities;
 double Game::lastTime;
-glm::vec3 Game::windVector = glm::vec3(1,0,0);
+glm::vec3 Game::windVector = glm::vec3(1, 0, 0);
 
 btDiscreteDynamicsWorld* dynamicsWorld;
 
@@ -54,7 +54,7 @@ void Game::Initialise()
 
 	entities.push_back(tempEntity2);
 
-	entities[entities.size()-1]->Init();
+	entities[entities.size() - 1]->Init();
 
 	windVector = glm::vec3(1, 1, 1);
 
@@ -73,6 +73,19 @@ void Game::Update()
 
 	for (std::vector<Entity*>::size_type n = 0; n < entities.size();)
 	{
+		if (entities[n]->GetCompatibleComponent<aerodynamics>() != NULL)
+		{
+			btCollisionObject* collObj = dynamicsWorld->getCollisionObjectArray().at(entities[n]->GetCompatibleComponent<aerodynamics>()->GetIndex());
+			btTransform t;
+			float mat[16];
+			t = collObj->getWorldTransform();
+			t.getOpenGLMatrix(mat);
+			entities[n]->SetTransform(btScalar2glmMat4(mat));
+			printf("____________\n");
+			for (int i = 0; i < 16; i++)
+				printf("%f\n", mat[i]);
+			printf("____________\n");
+		}
 		//entities[n]->Rotate(glm::vec3(0.01f, 0.01f, 0.0f));
 		entities[n]->Update(deltaTime);
 		n++;
@@ -93,7 +106,7 @@ void Game::Update()
 		zflip = !zflip;
 	glm::normalize(windVector);
 
-//	printf("%f.9\n", deltaTime);
+	//	printf("%f.9\n", deltaTime);
 }
 
 void Game::Render()

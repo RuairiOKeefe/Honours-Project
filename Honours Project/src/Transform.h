@@ -56,5 +56,5 @@ public:
 	void Scale(const glm::dvec3 &v3) { scale *= v3; changed = true; }
 
 	const glm::dmat4 GetTransform() const { return transform; }
-	void SetTransform(const glm::dmat4 m4) { transform = m4; changed = true; }
+	void SetTransform(const glm::dmat4 m4) { transform = m4; }
 };
