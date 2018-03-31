@@ -69,7 +69,7 @@ void Game::Update()
 	lastTime = clock();
 	free_cam->Update(deltaTime);
 
-	dynamicsWorld->stepSimulation(deltaTime, 10);
+	dynamicsWorld->stepSimulation(deltaTime, 1);
 
 	for (std::vector<Entity*>::size_type n = 0; n < entities.size();)
 	{
