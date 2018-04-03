@@ -1,4 +1,6 @@
 #include "SurfaceData.h"
+#include "Game.h"
+#define AIR_PRESSURE 1.2041f //Air Pressure at 1 atm at 20C
 
 void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 {
@@ -31,13 +33,13 @@ void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 	vertexWeights = normalize(vertexWeights);
 }
 
-vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, float deltaTime)
+vec3 SurfaceData::CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, float deltaTime, btCollisionObject &collObj)
 {
 	vec3 faceVel = vec3(0);
 	for (int i = 0; i < 3; i++)
 	{
 		float radius = distance(vertices[i].position, vec3(0));//assuming the center of the model is at (0,0,0)
-		vec3 angularVel = radius * (orientation / deltaTime);
+		vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getAngularVelocity());
 		switch (i)
 		{
 		case(0):
@@ -51,6 +53,15 @@ vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, float deltaTime)
 			break;
 		}
 	}
+	vec3 relativeVel = faceVel + Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getLinearVelocity());
+	//will do windvel-this^^
+	vec3 force = (0.5f*(AIR_PRESSURE)*(relativeVel*relativeVel)*area);
+	printf("%f ", force.x);
+	printf("%f ", force.y);
+	printf("%f \n", force.z);
+	if (glm::isnan(force.x))
+		return vec3(0);
 
+	btRigidBody::upcast(&collObj)->applyForce(Game::Get().glm2bt(force), origin + Game::Get().glm2bt(center));
 	return vec3(0);
 }

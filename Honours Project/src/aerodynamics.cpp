@@ -27,7 +27,7 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 	btTriangleMesh* mesh = new btTriangleMesh();
 
 	int numverts = vertices.size();
-	for (int i = 0; i < numverts-2; i+=3)//check this
+	for (int i = 0; i < numverts - 2; i += 3)//check this
 	{
 		std::vector<Vertex> polyVerts;
 		SurfaceData *tempSurface = new SurfaceData();
@@ -63,12 +63,11 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 	btVector3 inertia = btVector3(0.0, 0.0, 0.0);
 
 	btScalar scalar = 1.0;
-	trimeshShape->calculateLocalInertia(scalar, inertia);//Throws an error
+	trimeshShape->calculateLocalInertia(scalar, inertia);//Throws an error in debug
 
 	btDefaultMotionState* motionstate = new btDefaultMotionState(trans);
 
-	btRigidBody* body = new btRigidBody(1, motionstate, trimeshShape, inertia);
-
+	btRigidBody* body = new btRigidBody(25266, motionstate, trimeshShape, inertia); //Set mass to suit the scale of the object currently used at 1kg/m^3
 
 	btCollisionObject* collisionObject = new btCollisionObject();
 
@@ -80,9 +79,22 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 void aerodynamics::Update(const double delta)
 {
+	btCollisionObject* collObj = Game::Get().GetDynamicsWorld()->getCollisionObjectArray()[index];
 	vec3 orientation = vec3(GetParent()->GetTransform()[2][0], 0, GetParent()->GetTransform()[2][2]); //may be reverse?
+	btVector3 origin = Game::Get().glm2bt(GetParent()->GetPosition());
 	for (int i = 0; i < surfaceData.size(); i++)
 	{
-		surfaceData[i].CalculateSurfaceAirflow(orientation, delta);
+		surfaceData[i].CalculateSurfaceAirflow(origin, orientation, delta, *collObj);
+	}
+	if (false)
+	{
+		btVector3 a = btVector3(1.0, 0.0, 1.0);
+		btVector3 b = btVector3(10.0, 0.0, 0.0);
+		btVector3 c = Game::Get().glm2bt(GetParent()->GetPosition());
+		printf("%f ",b.getX());
+		printf("%f ", b.getY());
+		printf("%f \n", b.getZ());
+		btRigidBody::upcast(collObj)->applyForce(a, c + b);
+		btRigidBody::upcast(collObj)->applyForce(-a, c - b);
 	}
 }

@@ -31,8 +31,8 @@ void Renderable::SetModel(std::string location)
 void Renderable::SetEffect(std::string texName)
 {
 	effect->texture = Shader::Get().AddTexture(texName);
-	effect->shader = "Wind";
-	Shader::Get().AddShader("Wind");
+	effect->shader = "Phong";
+	Shader::Get().AddShader("Phong");
 }
 
 void Renderable::Render()

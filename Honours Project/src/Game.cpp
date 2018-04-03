@@ -44,7 +44,7 @@ void Game::Initialise()
 	auto tempRenderable2 = std::make_unique<Renderable>();
 	auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/Torus2.obj");
 	tempRenderable2->SetCube(1);
-	tempRenderable2->SetEffect("debug");
+	tempRenderable2->SetEffect("debug2");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tempRenderable2->UpdateTransforms();
 	tempAerodynamics->UpdateTransforms();
@@ -69,7 +69,7 @@ void Game::Update()
 	lastTime = clock();
 	free_cam->Update(deltaTime);
 
-	dynamicsWorld->stepSimulation(deltaTime, 1);
+	dynamicsWorld->stepSimulation(deltaTime, 10);
 
 	for (std::vector<Entity*>::size_type n = 0; n < entities.size();)
 	{

@@ -73,8 +73,7 @@ void Entity::Update(const double delta)
 	for (auto &c : components)
 	{
 		c.second->UpdateTransforms();
-		c.second->SetTransform(GetTransform() * c.second->GetTransform());
-		c.second->Move(glm::vec3(0.0));//lazy solution to make sure is changed is true
+		c.second->SetRendTransform(GetTransform() * c.second->GetTransform());
 		c.second->Update(delta);
 	}
 }

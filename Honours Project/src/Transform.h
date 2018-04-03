@@ -3,6 +3,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 class Transform
 {
@@ -12,6 +13,8 @@ private:
 	glm::dquat rotation;
 	glm::dvec3 scale;
 	glm::dmat4 transform;
+	glm::dvec3 skew;
+	glm::dvec4 perspective;
 
 public:
 	Transform() : scale(glm::dvec3(1.0f)), rotation(glm::dquat()), position(glm::dvec3()) {}
@@ -43,9 +46,9 @@ public:
 	const glm::dquat GetRotation() const { return rotation; }
 	//const glm::dvec3 GetRotation() const { }
 	void SetRotation(const glm::dquat &q) { rotation = q;  changed = true; }
-	void SetRotation(const glm::dvec3 &v3) { rotation = glm::dquat(v3); changed = true;  }
+	void SetRotation(const glm::dvec3 &v3) { rotation = glm::dquat(v3); changed = true; }
 	void Rotate(const glm::dquat &q) { SetRotation(rotation * q); changed = true; }
-	
+
 	void Rotate(const glm::dvec3 &v3)
 	{
 		SetRotation(rotation * glm::dquat(glm::radians(v3))); changed = true;
@@ -56,5 +59,6 @@ public:
 	void Scale(const glm::dvec3 &v3) { scale *= v3; changed = true; }
 
 	const glm::dmat4 GetTransform() const { return transform; }
-	void SetTransform(const glm::dmat4 m4) { transform = m4; }
+	void SetTransform(const glm::dmat4 m4) { transform = m4; glm::decompose(transform, scale, rotation, position, skew, perspective); rotation = glm::conjugate(rotation); changed = true; }
+	void SetRendTransform(const glm::dmat4 m4) { transform = m4; changed = true; }
 };

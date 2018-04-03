@@ -52,7 +52,7 @@ void GameEngine::Render(glm::mat4 m, Model model, Effect effect)
 {
 	const auto mvp = Get().cameraMVP * m;
 	//	Shader::Get().UseShader("Basic", effect, mvp);
-	Shader::Get().UseShader("Wind", effect, mvp, m, m, cameraPos, windVector);
+	Shader::Get().UseShader("Phong", effect, mvp, m, m, cameraPos, windVector);
 	model.Draw();
 }
 
