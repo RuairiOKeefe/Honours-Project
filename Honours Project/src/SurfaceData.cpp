@@ -17,11 +17,8 @@ void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 
 	vertexWeights = vec3(0);
 
-	vec3 a = vertices[0].position - vertices[1].position;
-	vec3 b = vertices[0].position - vertices[2].position;
-
-	normal = cross(a, b);
-	normal = normalize(normal);
+	normal = cross(AB, AC);
+	normal = normalize(normal);//Check for a use for this
 
 	center.x = (vertices[0].position.x + vertices[1].position.x + vertices[2].position.x) / 3;
 	center.y = (vertices[0].position.y + vertices[1].position.y + vertices[2].position.y) / 3;
@@ -39,10 +36,10 @@ vec3 SurfaceData::CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, fl
 	for (int i = 0; i < 3; i++)
 	{
 		float radius = distance(vertices[i].position, vec3(0));//assuming the center of the model is at (0,0,0)
-		vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getAngularVelocity());
+		vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getVelocityInLocalPoint(Game::Get().glm2bt(vertices[i].position)));
 		switch (i)
 		{
-		case(0):
+		case(0):	
 			faceVel += (angularVel*vertexWeights.x);
 			break;
 		case(1):
@@ -53,12 +50,13 @@ vec3 SurfaceData::CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, fl
 			break;
 		}
 	}
-	vec3 relativeVel = faceVel + Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getLinearVelocity());
-	//will do windvel-this^^
+	//use face normal to find out how this affects face orientation
+	vec3 relativeVel = faceVel;
+	//will do windvel (taking in to account oriented normal)+(or-?)this^^
 	vec3 force = (0.5f*(AIR_PRESSURE)*(relativeVel*relativeVel)*area);
-	printf("%f ", force.x);
-	printf("%f ", force.y);
-	printf("%f \n", force.z);
+	//printf("%f ", force.x);
+	//printf("%f ", force.y);
+	//printf("%f \n", force.z);
 	if (glm::isnan(force.x))
 		return vec3(0);
 

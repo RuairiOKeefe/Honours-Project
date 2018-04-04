@@ -67,7 +67,7 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 	btDefaultMotionState* motionstate = new btDefaultMotionState(trans);
 
-	btRigidBody* body = new btRigidBody(25266, motionstate, trimeshShape, inertia); //Set mass to suit the scale of the object currently used at 1kg/m^3
+	btRigidBody* body = new btRigidBody(4000000, motionstate, trimeshShape, inertia);
 
 	btCollisionObject* collisionObject = new btCollisionObject();
 
@@ -85,16 +85,5 @@ void aerodynamics::Update(const double delta)
 	for (int i = 0; i < surfaceData.size(); i++)
 	{
 		surfaceData[i].CalculateSurfaceAirflow(origin, orientation, delta, *collObj);
-	}
-	if (false)
-	{
-		btVector3 a = btVector3(1.0, 0.0, 1.0);
-		btVector3 b = btVector3(10.0, 0.0, 0.0);
-		btVector3 c = Game::Get().glm2bt(GetParent()->GetPosition());
-		printf("%f ",b.getX());
-		printf("%f ", b.getY());
-		printf("%f \n", b.getZ());
-		btRigidBody::upcast(collObj)->applyForce(a, c + b);
-		btRigidBody::upcast(collObj)->applyForce(-a, c - b);
 	}
 }
