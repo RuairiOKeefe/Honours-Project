@@ -26,14 +26,14 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 {
 	btTriangleMesh* mesh = new btTriangleMesh();
 
-	int numverts = vertices.size();
-	for (int i = 0; i < numverts - 2; i += 3)//check this
+	int numVerts = vertices.size();
+	for (int i = 0; i < numVerts - 2; i += 3)//check this
 	{
 		std::vector<Vertex> polyVerts;
 		SurfaceData *tempSurface = new SurfaceData();
 		for (int j = 0; j < 3; j++)
 		{
-			if (i + j < numverts)
+			if (i + j < numVerts)
 				polyVerts.push_back(vertices[i + j]);
 			else
 				polyVerts.push_back(vertices[0]);
@@ -69,11 +69,6 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 	btRigidBody* body = new btRigidBody(4000000, motionstate, trimeshShape, inertia);
 
-	btCollisionObject* collisionObject = new btCollisionObject();
-
-	collisionObject->setCollisionShape(trimeshShape);
-
-	//Game::Get().GetDynamicsWorld()->addCollisionObject(collisionObject);
 	Game::Get().GetDynamicsWorld()->addRigidBody(body);
 }
 
