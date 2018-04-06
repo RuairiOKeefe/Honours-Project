@@ -30,23 +30,23 @@ void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 	vertexWeights = normalize(vertexWeights);
 }
 
-vec3 SurfaceData::CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, float deltaTime, btCollisionObject &collObj)
+vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, vec3 linearVel, vec3 angularVel)
 {
 	vec3 faceVel = vec3(0);
 	for (int i = 0; i < 3; i++)
 	{
 		float radius = distance(vertices[i].position, vec3(0));//assuming the center of the model is at (0,0,0)
-		vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(&collObj)->getVelocityInLocalPoint(Game::Get().glm2bt(vertices[i].position)));
+		vec3 localVel = linearVel + cross(angularVel, vertices[i].position); //angularVel is angular velocity of body
 		switch (i)
 		{
 		case(0):	
-			faceVel += (angularVel*vertexWeights.x);
+			faceVel += (localVel*vertexWeights.x);
 			break;
 		case(1):
-			faceVel += (angularVel*vertexWeights.y);
+			faceVel += (localVel*vertexWeights.y);
 			break;
 		case(2):
-			faceVel += (angularVel*vertexWeights.z);
+			faceVel += (localVel*vertexWeights.z);
 			break;
 		}
 	}
@@ -60,6 +60,5 @@ vec3 SurfaceData::CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, fl
 	if (glm::isnan(force.x))
 		return vec3(0);
 
-	btRigidBody::upcast(&collObj)->applyForce(Game::Get().glm2bt(force), origin + Game::Get().glm2bt(center));
-	return vec3(0);
+	return vec3(force);
 }

@@ -77,8 +77,11 @@ void aerodynamics::Update(const double delta)
 	btCollisionObject* collObj = Game::Get().GetDynamicsWorld()->getCollisionObjectArray()[index];
 	vec3 orientation = vec3(GetParent()->GetTransform()[2][0], 0, GetParent()->GetTransform()[2][2]); //may be reverse?
 	btVector3 origin = Game::Get().glm2bt(GetParent()->GetPosition());
+	vec3 linearVel = Game::Get().bt2glm(btRigidBody::upcast(collObj)->getLinearVelocity());
+	vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(collObj)->getAngularVelocity());
 	for (int i = 0; i < surfaceData.size(); i++)
 	{
-		surfaceData[i].CalculateSurfaceAirflow(origin, orientation, delta, *collObj);
+		vec3 force = surfaceData[i].CalculateSurfaceAirflow(orientation, linearVel, angularVel);
+		btRigidBody::upcast(collObj)->applyForce(Game::Get().glm2bt(force), origin + Game::Get().glm2bt(surfaceData[i].center));
 	}
 }

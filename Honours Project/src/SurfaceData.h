@@ -19,5 +19,5 @@ public:
 
 	SurfaceData() : area(0.0), normal(vec3(0.0f)), vertices(std::vector<Vertex>(0, Vertex())){};
 	void CalculateSurface(std::vector<Vertex> vertices);
-	vec3 CalculateSurfaceAirflow(btVector3 origin, vec3 orientation, float deltaTime, btCollisionObject &collObj);
+	vec3 CalculateSurfaceAirflow(vec3 orientation, vec3 linearVel, vec3 angularVel);
 };
