@@ -17,7 +17,7 @@ private:
 
 public:
 	std::vector<SurfaceData> surfaceData;
-
+	std::vector<vec3*> verticesVec;
 	void from_json(const nlohmann::json & j);
 
 	aerodynamics();

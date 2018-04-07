@@ -43,7 +43,7 @@ void Game::Initialise()
 	Entity* tempEntity2 = new Entity;
 	auto tempRenderable2 = std::make_unique<Renderable>();
 	auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/Torus2.obj");
-	tempRenderable2->SetCube(1);
+	tempRenderable2->SetModel("../res/models/Torus2.obj");
 	tempRenderable2->SetEffect("debug2");
 	tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tempRenderable2->UpdateTransforms();
@@ -56,9 +56,10 @@ void Game::Initialise()
 
 	entities[entities.size() - 1]->Init();
 
-	windVector = glm::vec3(1, 1, 1);
+	windVector = glm::vec3(100, 0, 100);
 
 	lastTime = clock();
+	GameEngine::Get().SetupComputeShader();
 }
 
 void Game::Update()
@@ -87,21 +88,6 @@ void Game::Update()
 		entities[n]->Update(deltaTime);
 		n++;
 	}
-	if (xflip)
-		windVector.x -= deltaTime;
-	else
-		windVector.x += deltaTime;
-
-	if (zflip)
-		windVector.z -= deltaTime;
-	else
-		windVector.z += deltaTime;
-
-	if (windVector.x > 1 || windVector.x < -1)
-		xflip = !xflip;
-	if (windVector.z > 1 || windVector.z < -1)
-		zflip = !zflip;
-	glm::normalize(windVector);
 
 	//	printf("%f.9\n", deltaTime);
 }

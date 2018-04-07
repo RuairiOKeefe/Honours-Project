@@ -1,7 +1,7 @@
 #pragma once
 #define GLEW_STATIC
 #define GLFW_DLL
-#define NUM_PARTICLES 1024*1024 // total number of particles to move
+#define NUM_OBJECTS 512*512
 #define WORK_GROUP_SIZE 128 // # work-items per work-group
 
 #include <GL/glew.h>
@@ -12,24 +12,18 @@
 #include "Singleton.h"
 #include "Material.h"
 #include "Model.h"
+#include "SurfaceData.h"
 
 class Material;
 
 
-struct pos
+struct AirflowValues
 {
-	float x, y, z, w;// positions
+	glm::mat4 trans;
+	glm::vec3 vertices[3];
+	float area;
+	glm::vec3 normal, center, vertexWeights, linearVel, angularVel, windVel;
 };
-struct vel
-{
-	float vx, vy, vz, vw;  //velocities
-};
-struct colour
-{
-	float r, g, b, a; // colours
-};
-
-
 
 struct Effect
 {
@@ -37,6 +31,8 @@ struct Effect
 	std::string shader;
 	Material* material;
 };
+
+using namespace glm;
 
 class GameEngine : public Singleton<GameEngine>
 {
@@ -51,10 +47,11 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 windVector;
 
-	// need to do the following for both position, velocity, and colors of the particles:
-	GLuint posSSbo;
-	GLuint velSSbo;
-	GLuint colSSbo;
+	GLuint airflowShader;
+	GLuint airflowProgram;
+	GLuint airflowValuesInBuff;
+	GLuint forceOutBuff;
+
 public:
 
 	// The render window.
@@ -74,7 +71,7 @@ public:
 	void SetWindVector(glm::vec3 windVector) { this->windVector = windVector; }
 
 	void SetupComputeShader();
-	void InvokeComputeShader();
+	glm::vec3* InvokeComputeShader(mat4 trans, std::vector<SurfaceData> surfaceData, vec3 linearVel, vec3 angularVel, vec3 windVec);
 
 	void SetCamera(glm::mat4 camera);
 	// Execute the game engine.

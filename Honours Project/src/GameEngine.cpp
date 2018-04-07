@@ -58,49 +58,93 @@ void GameEngine::Render(glm::mat4 m, Model model, Effect effect)
 
 void GameEngine::SetupComputeShader()
 {
-	glGenBuffers(1, &posSSbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct pos), NULL, GL_STATIC_DRAW);
+	glGenBuffers(1, &airflowValuesInBuff);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, airflowValuesInBuff);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_OBJECTS * sizeof(struct AirflowValues), NULL, GL_STATIC_DRAW);
 
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
-	struct pos *points = (struct pos *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(struct pos), bufMask);
-	for (int i = 0; i < NUM_PARTICLES; i++)
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	struct AirflowValues *aValues = (struct AirflowValues *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_OBJECTS * sizeof(struct AirflowValues), bufMask);
+
+	for (int i = 0; i < NUM_OBJECTS; i++)
 	{
-		points[i].x = i;
-		points[i].y = i;
-		points[i].z = i;
-		points[i].w = 1.;
+		aValues->trans = glm::mat4(0);
+		aValues->vertices[0] = glm::vec3(0);
+		aValues->vertices[1] = glm::vec3(0);
+		aValues->vertices[2] = glm::vec3(0);
+		aValues->area = 0.0;
+		aValues->normal = glm::vec3(0);
+		aValues->center = glm::vec3(0);
+		aValues->vertexWeights = glm::vec3(0);
+		aValues->linearVel = glm::vec3(0);
+		aValues->angularVel = glm::vec3(0);
+		aValues->windVel = glm::vec3(0);
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
-	glGenBuffers(1, &velSSbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_PARTICLES * sizeof(struct vel), NULL, GL_STATIC_DRAW);
+	glGenBuffers(1, &forceOutBuff);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, forceOutBuff);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, NUM_OBJECTS * sizeof(glm::vec3), NULL, GL_STATIC_DRAW);
+	glm::vec3 *force = (glm::vec3 *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_OBJECTS * sizeof(glm::vec3), bufMask);
 
-	struct vel *vels = (struct vel *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, NUM_PARTICLES * sizeof(struct vel), bufMask);
-
-	for (int i = 0; i < NUM_PARTICLES; i++)
-	{
-		vels[i].vx = i;
-		vels[i].vy = i;
-		vels[i].vz = i;
-		vels[i].vw = 0.;
-	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	std::ifstream ifs("../res/shaders/SimulateSurface.comp");
+	std::string content((std::istreambuf_iterator<char>(ifs)),
+		(std::istreambuf_iterator<char>()));
+	const GLchar *source = static_cast<const GLchar *>(content.c_str());
+
+	airflowProgram = glCreateProgram();
+	airflowShader = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(airflowShader, 1, &source, NULL);
+	glCompileShader(airflowShader);
+	glAttachShader(airflowProgram, airflowShader);
+	glLinkProgram(airflowProgram);
 }
 
-void GameEngine::InvokeComputeShader()
+glm::vec3* GameEngine::InvokeComputeShader(mat4 trans, std::vector<SurfaceData> surfaceData, vec3 linearVel, vec3 angularVel, vec3 windVec)
 {
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, posSSbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, velSSbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, colSSbo);
 
-	glUseProgram(254234234);//Fix badly
-	glDispatchCompute(NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1);
+	glGenBuffers(1, &airflowValuesInBuff);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, airflowValuesInBuff);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, surfaceData.size() * sizeof(struct AirflowValues), NULL, GL_STATIC_DRAW);
+
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	struct AirflowValues *aValues = (struct AirflowValues *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, surfaceData.size() * sizeof(struct AirflowValues), bufMask);
+
+	for (int i = 0; i < surfaceData.size(); i++)
+	{
+		aValues->trans = trans;
+		aValues->vertices[0] = surfaceData[i].vertices[0].position;
+		aValues->vertices[1] = surfaceData[i].vertices[1].position;
+		aValues->vertices[2] = surfaceData[i].vertices[2].position;
+		aValues->area = surfaceData[i].area;
+		aValues->normal = surfaceData[i].normal;
+		aValues->center = surfaceData[i].center;
+		aValues->vertexWeights = surfaceData[i].vertexWeights;
+		aValues->linearVel = linearVel;
+		aValues->angularVel = angularVel;
+		aValues->windVel = windVec;
+	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	glGenBuffers(1, &forceOutBuff);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, forceOutBuff);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, surfaceData.size() * sizeof(glm::vec3), NULL, GL_STATIC_DRAW);
+	glm::vec3 *force = (glm::vec3 *)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, surfaceData.size() * sizeof(glm::vec3), bufMask);
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, airflowValuesInBuff);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, forceOutBuff);
+
+	glUseProgram(airflowProgram);
+	glDispatchCompute(surfaceData.size() / WORK_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-	///rendering part, for the example im using this is used to render particles
-
+	return force;
 }
 
 void GameEngine::SetCamera(glm::mat4 camera)

@@ -30,16 +30,19 @@ void SurfaceData::CalculateSurface(std::vector<Vertex> vertices)
 	vertexWeights = normalize(vertexWeights);
 }
 
-vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, vec3 linearVel, vec3 angularVel)
+vec3 SurfaceData::CalculateSurfaceAirflow(mat4 trans, vec3* vertices, float area, vec3 normal, vec3 center, vec3 vertexWeights, vec3 linearVel, vec3 angularVel, vec3 windVec)
 {
 	vec3 faceVel = vec3(0);
+	normal = vec4(normal, 0) * transpose(inverse(trans));
 	for (int i = 0; i < 3; i++)
 	{
-		float radius = distance(vertices[i].position, vec3(0));//assuming the center of the model is at (0,0,0)
-		vec3 localVel = linearVel + cross(angularVel, vertices[i].position); //angularVel is angular velocity of body
+		vertices[i] = vec4(vertices[i], 0) * transpose(trans);
+
+		float radius = distance(vertices[i], vec3(0));//assuming the center of the model is at (0,0,0)
+		vec3 localVel = linearVel + cross(angularVel, vertices[i]);
 		switch (i)
 		{
-		case(0):	
+		case(0):
 			faceVel += (localVel*vertexWeights.x);
 			break;
 		case(1):
@@ -50,13 +53,11 @@ vec3 SurfaceData::CalculateSurfaceAirflow(vec3 orientation, vec3 linearVel, vec3
 			break;
 		}
 	}
-	//use face normal to find out how this affects face orientation
-	vec3 relativeVel = faceVel;
-	//will do windvel (taking in to account oriented normal)+(or-?)this^^
-	vec3 force = (0.5f*(AIR_PRESSURE)*(relativeVel*relativeVel)*area);
-	//printf("%f ", force.x);
-	//printf("%f ", force.y);
-	//printf("%f \n", force.z);
+
+	vec3 relativeVel = faceVel + windVec;
+	vec3 finalVel = normal * dot(relativeVel, normal);
+	vec3 force = (0.5f*(AIR_PRESSURE)*(finalVel*finalVel)*area);
+	force = length(force) * normal;
 	if (glm::isnan(force.x))
 		return vec3(0);
 

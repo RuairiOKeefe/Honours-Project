@@ -1,5 +1,6 @@
 #include "aerodynamics.h"
 #include "Game.h"
+#include "GameEngine.h"
 
 void aerodynamics::from_json(const nlohmann::json & j)
 {
@@ -49,6 +50,14 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 		mesh->addTriangle(v0, v1, v2);
 	}
+
+	for (int i = 0; i < surfaceData.size(); i++)
+	{
+		vec3 vertices[3];
+		for (int j = 0; j < 3; j++)
+			vertices[j] = surfaceData[i].vertices[j].position;
+		verticesVec.push_back(vertices);
+	}
 	index = Game::Get().GetDynamicsWorld()->getCollisionObjectArray().size();
 
 	btTransform	trans;
@@ -77,11 +86,28 @@ void aerodynamics::Update(const double delta)
 	btCollisionObject* collObj = Game::Get().GetDynamicsWorld()->getCollisionObjectArray()[index];
 	vec3 orientation = vec3(GetParent()->GetTransform()[2][0], 0, GetParent()->GetTransform()[2][2]); //may be reverse?
 	btVector3 origin = Game::Get().glm2bt(GetParent()->GetPosition());
+	mat4 trans = GetParent()->GetTransform();
 	vec3 linearVel = Game::Get().bt2glm(btRigidBody::upcast(collObj)->getLinearVelocity());
 	vec3 angularVel = Game::Get().bt2glm(btRigidBody::upcast(collObj)->getAngularVelocity());
-	for (int i = 0; i < surfaceData.size(); i++)
+	vec3 windVec = Game::Get().GetWindVector();
+	if (true)
 	{
-		vec3 force = surfaceData[i].CalculateSurfaceAirflow(orientation, linearVel, angularVel);
-		btRigidBody::upcast(collObj)->applyForce(Game::Get().glm2bt(force), origin + Game::Get().glm2bt(surfaceData[i].center));
+		for (int i = 0; i < surfaceData.size(); i++)
+		{
+			vec3 vertices[3];
+			for (int j = 0; j < 3; j++)
+				vertices[j] = verticesVec[i][j];
+			vec3 force = surfaceData[i].CalculateSurfaceAirflow(trans, vertices, surfaceData[i].area, surfaceData[i].normal, surfaceData[i].center, surfaceData[i].vertexWeights, linearVel, angularVel, windVec);
+			btRigidBody::upcast(collObj)->applyForce(Game::Get().glm2bt(force), origin + Game::Get().glm2bt(surfaceData[i].center));
+		}
+	}
+	else
+	{
+		GameEngine::Get().SetupComputeShader();
+		vec3 *force = GameEngine::Get().InvokeComputeShader(trans, surfaceData, linearVel, angularVel, windVec);
+		for (int i = 0; i < surfaceData.size(); i++)
+		{
+			btRigidBody::upcast(collObj)->applyForce(Game::Get().glm2bt(force[i]), origin + Game::Get().glm2bt(surfaceData[i].center));
+		}
 	}
 }
