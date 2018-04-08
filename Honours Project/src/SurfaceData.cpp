@@ -55,9 +55,10 @@ vec3 SurfaceData::CalculateSurfaceAirflow(mat4 trans, vec3* vertices, float area
 	}
 
 	vec3 relativeVel = faceVel + windVec;
-	vec3 finalVel = normal * dot(relativeVel, normal);
+	vec3 finalVel = normal * max(dot(relativeVel, normal), 0.0f);
 	vec3 force = (0.5f*(AIR_PRESSURE)*(finalVel*finalVel)*area);
-	force = length(force) * normal;
+	force = length(force) * -normal;
+
 	if (glm::isnan(force.x))
 		return vec3(0);
 

@@ -76,8 +76,8 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 	btDefaultMotionState* motionstate = new btDefaultMotionState(trans);
 
-	btRigidBody* body = new btRigidBody(4000000, motionstate, trimeshShape, inertia);
-
+	btRigidBody* body = new btRigidBody(10.0, motionstate, trimeshShape, inertia);
+	
 	Game::Get().GetDynamicsWorld()->addRigidBody(body);
 }
 

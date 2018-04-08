@@ -59,6 +59,6 @@ public:
 	void Scale(const glm::dvec3 &v3) { scale *= v3; changed = true; }
 
 	const glm::dmat4 GetTransform() const { return transform; }
-	void SetTransform(const glm::dmat4 m4) { transform = m4; glm::decompose(transform, scale, rotation, position, skew, perspective); rotation = glm::conjugate(rotation); changed = true; }
+	void SetTransform(const glm::dmat4 m4) { transform = m4; glm::dvec3 oldScale = scale; glm::decompose(transform, scale, rotation, position, skew, perspective); rotation = glm::conjugate(rotation); scale = oldScale; changed = true; }
 	void SetRendTransform(const glm::dmat4 m4) { transform = m4; changed = true; }
 };

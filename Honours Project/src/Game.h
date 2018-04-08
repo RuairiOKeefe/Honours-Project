@@ -19,8 +19,7 @@ private:
 	static std::vector<Entity*> entities;//Figure out how to split this.
 	static double lastTime;
 	static glm::vec3 windVector;
-	bool xflip = false;
-	bool zflip = true;
+	bool toPush = true;
 
 	btDiscreteDynamicsWorld* dynamicsWorld;
 
