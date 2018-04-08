@@ -47,9 +47,9 @@ void main;
 	}
 
 	vec3 relativeVel = faceVel + windVec;
-	vec3 finalVel = airflowValues.normal * dot(relativeVel, airflowValues.normal);
+	vec3 finalVel = airflowValues.normal * max(dot(relativeVel, airflowValues.normal), 0);
 	force = (0.5f*(AIR_PRESSURE)*(finalVel*finalVel)*airflowValues.area);
-	force = length(force) * airflowValues.normal;
+	force = length(force) * -airflowValues.normal;
 	if (glm::isnan(force.x))
 	{
 		force = vec3(0);

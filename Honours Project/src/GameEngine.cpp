@@ -15,7 +15,7 @@ void GameEngine::Initialise()
 	FileIO io = FileIO::Get();
 	io.LoadIniFile();
 	// Create a windowed mode window with hard coded parameters.
-	if (fullScreen == false)
+	if (fullScreen == true)
 		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Honours", NULL, NULL);
 	else
 		window = glfwCreateWindow(GetScreenWidth(), GetScreenHeight(), "Honours", glfwGetPrimaryMonitor(), NULL);

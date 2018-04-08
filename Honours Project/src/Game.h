@@ -20,6 +20,7 @@ private:
 	static double lastTime;
 	static glm::vec3 windVector;
 	bool toPush = true;
+	int test;
 
 	btDiscreteDynamicsWorld* dynamicsWorld;
 

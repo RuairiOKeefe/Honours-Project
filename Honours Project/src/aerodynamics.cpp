@@ -10,8 +10,9 @@ aerodynamics::aerodynamics() : Component("aerodynamics")
 {
 }
 
-aerodynamics::aerodynamics(const std::string & fileName) : Component("aerodynamics"), Model(fileName)
+aerodynamics::aerodynamics(const std::string & fileName, btScalar mass) : Component("aerodynamics"), Model(fileName)
 {
+	this->mass = mass;
 }
 
 aerodynamics::~aerodynamics()
@@ -76,8 +77,8 @@ void aerodynamics::GenerateSurfaceData() //Should be called after an aerodynamic
 
 	btDefaultMotionState* motionstate = new btDefaultMotionState(trans);
 
-	btRigidBody* body = new btRigidBody(10.0, motionstate, trimeshShape, inertia);
-	
+	btRigidBody* body = new btRigidBody(mass, motionstate, trimeshShape, inertia);
+
 	Game::Get().GetDynamicsWorld()->addRigidBody(body);
 }
 
