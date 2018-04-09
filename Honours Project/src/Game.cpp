@@ -34,7 +34,7 @@ void Game::Initialise()
 	tempRenderable->SetModel("../res/models/paper_airplane.obj");
 	tempRenderable->SetEffect("debug");
 	tempEntity->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	tempEntity->SetScale(glm::vec3(100));
+	tempEntity->SetScale(glm::vec3(10));
 	tempRenderable->UpdateTransforms();
 
 	tempEntity->AddComponent(move(tempRenderable));
@@ -140,30 +140,66 @@ void Game::Initialise()
 	break;
 	case(2):
 	{
-		Entity* tempEntity2 = new Entity;
-		auto tempRenderable2 = std::make_unique<Renderable>();
-		auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/1920_sided.obj", 10.0);
-		tempRenderable2->SetModel("../res/models/1920_sided.obj");
-		tempRenderable2->SetEffect("debug");
-		tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-		tempEntity2->SetScale(glm::vec3(100));
-		tempRenderable2->UpdateTransforms();
-		tempAerodynamics->UpdateTransforms();
-		tempEntity2->AddComponent(move(tempAerodynamics));
-		tempEntity2->AddComponent(move(tempRenderable2));
+		for (int i = 0; i < 256; i++)
+		{
+			Entity* tempEntity2 = new Entity;
+			auto tempRenderable2 = std::make_unique<Renderable>();
+			//Object number of sides available: 4 8 12 20 || increase by 4 from here >> 120 480 1920 7680 30720 122880 || doesn't work >> 491520
+			auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/480_sided.obj", 10.0);
+			tempRenderable2->SetModel("../res/models/480_sided.obj");
+			tempRenderable2->SetEffect("debug");
+			tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+			tempEntity2->SetScale(glm::vec3(1));
+			tempRenderable2->UpdateTransforms();
+			tempAerodynamics->UpdateTransforms();
+			tempEntity2->AddComponent(move(tempAerodynamics));
+			tempEntity2->AddComponent(move(tempRenderable2));
 
-		entities.push_back(tempEntity2);
+			entities.push_back(tempEntity2);
+		}
 	}
 	break;
 	case(3):
 	{
+		Entity* tempEntity3 = new Entity;
+		auto tempRenderable3 = std::make_unique<Renderable>();
+		auto tempAerodynamics3 = std::make_unique<aerodynamics>("../res/models/cube.obj", 1.0);
+		tempRenderable3->SetModel("../res/models/cube.obj");
+		tempRenderable3->SetEffect("debug");
+		tempEntity3->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		tempEntity3->SetScale(glm::vec3(1));
+		tempRenderable3->UpdateTransforms();
+		tempAerodynamics3->UpdateTransforms();
+		tempEntity3->AddComponent(move(tempAerodynamics3));
+		tempEntity3->AddComponent(move(tempRenderable3));
+
+		entities.push_back(tempEntity3);
+
+		Entity* tempEntity4 = new Entity;
+		auto tempRenderable4 = std::make_unique<Renderable>();
+		auto tempAerodynamics4 = std::make_unique<aerodynamics>("../res/models/1920_sided.obj", 1.0);
+		tempRenderable4->SetModel("../res/models/8_sided.obj");
+		tempRenderable4->SetEffect("debug");
+		tempEntity4->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+		tempEntity4->SetScale(glm::vec3(1));
+		tempRenderable4->UpdateTransforms();
+		tempAerodynamics4->UpdateTransforms();
+		tempEntity4->AddComponent(move(tempAerodynamics4));
+		tempEntity4->AddComponent(move(tempRenderable4));
+
+		entities.push_back(tempEntity4);
+	}
+	break;
+	case(4):
+	{
+		float height = 2;
 		Entity* tempEntity2 = new Entity;
 		auto tempRenderable2 = std::make_unique<Renderable>();
 		auto tempAerodynamics = std::make_unique<aerodynamics>("../res/models/paper_airplane.obj", 0.06);
 		tempRenderable2->SetModel("../res/models/paper_airplane.obj");
 		tempRenderable2->SetEffect("debug");
-		tempEntity2->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-		tempEntity2->SetScale(glm::vec3(100));
+		tempEntity2->SetPosition(glm::vec3(0.0f, height, 0.0f));
+		tempEntity2->SetScale(glm::vec3(1));
 		tempRenderable2->UpdateTransforms();
 		tempAerodynamics->UpdateTransforms();
 		tempEntity2->AddComponent(move(tempAerodynamics));
@@ -220,21 +256,23 @@ void Game::Update()
 						force = btVector3(0, 0, -10000);
 						break;
 					case(2):
-						force = btVector3(0, 0, 0);
+						force = btVector3(0, 0, -10000);
 						break;
 					case(3):
-						force = btVector3(0, 0, -100);
+						force = btVector3(0, 0, 0);
+						break;
+					case(4):
+						force = btVector3(0, 0, -11);
 						break;
 					}
 					btRigidBody::upcast(collObj)->applyCentralForce(force);
 				}
+				//printf("%f\n", btRigidBody::upcast(collObj)->getLinearVelocity().getY());
 			}
 			//else
 			//{
 			//		printf("%f\n", glm::distance(dvec3(0), entities[n]->GetPosition()));
 			//}
-			//printf("%f, ", btRigidBody::upcast(collObj)->getLinearVelocity().getY());
-			//printf("%f \n", btRigidBody::upcast(collObj)->getLinearVelocity().getZ());
 		}
 		entities[n]->Update(deltaTime);
 		n++;
